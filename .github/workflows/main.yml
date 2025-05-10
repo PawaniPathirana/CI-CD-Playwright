@@ -1,12 +1,14 @@
 name: Playwright Test Pipeline
+
 on:
   push:
     branches:  
       - main
-  
+
 jobs:
   test:
     runs-on: ubuntu-latest
+
     steps:
       # Checkout the code
       - name: Checkout code
@@ -26,11 +28,15 @@ jobs:
       - name: Install Playwright browsers
         run: npx playwright install
 
-      # Install Http Server
+      # Install required OS dependencies for Playwright browsers
+      - name: Install Playwright system dependencies
+        run: npx playwright install-deps
+
+      # Install HTTP server
       - name: Install HTTP server
         run: npm install -g http-server
 
-            # Start HTTP server
+      # Start HTTP server
       - name: Start HTTP server
         run: |
           nohup http-server ./tests -p 5500 &
@@ -42,7 +48,6 @@ jobs:
             echo "Waiting for server to start..."
             sleep 2
           done
-
 
       # Run Playwright tests
       - name: Run Playwright tests
