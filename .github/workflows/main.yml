@@ -2,36 +2,47 @@ name: Playwright Test Pipeline
 on:
   push:
     branches:  
-    - main
+      - main
   
 jobs:
   test:
-    
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-    - uses: actions/checkout@v4
-    - uses: actions/setup-node@v4
-      with:
-        node-version: '20.x'
-    - name: Install dependencies
-      run: npm install
-    - name: Install Playwright Browsers
-      run: npx playwright install
+      # Checkout the code
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    - name: Install Http Server
-      run: npm install  -g http-server 
+      # Set up Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
 
-    - name: Start Http Server
-      run: |
-        nohup http-server -p 8080  &
-    - name: Wait for server to start
-      run: |
-        while ! curl -s http://127.0.0.1:8080/; do
-          echo "Waiting for server to start..."
-          sleep 5
-        done
+      # Install dependencies
+      - name: Install dependencies
+        run: npm install
 
-    - name: Run Playwright tests
-      run: npx playwright tests\mockApi.spec.js
+      # Install Playwright Browsers
+      - name: Install Playwright browsers
+        run: npx playwright install
+
+      # Install Http Server
+      - name: Install HTTP server
+        run: npm install -g http-server
+
+      # Start HTTP server
+      - name: Start HTTP server
+        run: |
+          nohup http-server -p 5500 &
+
+      # Wait for server to start
+      - name: Wait for server to start
+        run: |
+          while ! curl -s http://127.0.0.1:5500/; do
+            echo "Waiting for server to start..."
+            sleep 5
+          done
+
+      # Run Playwright tests
+      - name: Run Playwright tests
+        run:  npx playwright tests/mockApi.spec.js
