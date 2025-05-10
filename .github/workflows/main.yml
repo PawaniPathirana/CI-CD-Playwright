@@ -25,10 +25,10 @@ jobs:
 
     - name: Start Http Server
       run: |
-        nohup http-server -p 5500  &
+        nohup http-server -p 8080  &
     - name: Wait for server to start
       run: |
-        while ! curl -s http://127.0.0.1:8081/; do
+        while ! curl -s http://127.0.0.1:8080/; do
           echo "Waiting for server to start..."
           sleep 5
         done
