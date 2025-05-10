@@ -1,29 +1,31 @@
-const{expect,test}= require ("@playwright/test")
+const { expect, test } = require("@playwright/test");
 
-test('Mocking api call', async ({ page }) => {
-    await page.route('https://randomuser.me/api/', async (route) => {
-      const mockResponse = {
-        results: [
-          {
-            name: {
-              first: 'JHON'
-            }
+test('Mocking API call', async ({ page }) => {
+  // Mock the API route
+  await page.route('https://randomuser.me/api/', async (route) => {
+    const mockResponse = {
+      results: [
+        {
+          name: {
+            first: 'JHON'
           }
-        ]
-      };
-  
-      await route.fulfill({
-        contentType: 'application/json',
-        body: JSON.stringify(mockResponse)
-      });
+        }
+      ]
+    };
+
+    await route.fulfill({
+      contentType: 'application/json',
+      body: JSON.stringify(mockResponse)
     });
-  
-    await page.goto('http://127.0.0.1:5500/tests/apiCall.html');
-  
-    await page.click('#btn');
-  
-    const userData = await page.locator('p');
-  
-    await expect(userData).toHaveText('The new user name is JHON');
   });
-  
+
+  // Updated: Navigate to the correct port (5500)
+  await page.goto('http://127.0.0.1:5500/tests/apiCall.html');
+
+  // Simulate button click
+  await page.click('#btn');
+
+  // Locate the paragraph element and assert the expected text
+  const userData = await page.locator('p');
+  await expect(userData).toHaveText('The new user name is JHON');
+});
