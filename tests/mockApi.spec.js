@@ -20,7 +20,8 @@ test('Mocking API call', async ({ page }) => {
   });
 
   // Updated: Navigate to the correct port (5500)
-  await page.goto('http://127.0.0.1:5500/tests/apiCall.html');
+  await page.goto('http://127.0.0.1:5500/apiCall.html');
+
 
   // Simulate button click
   await page.click('#btn');
